@@ -1,0 +1,28 @@
+import csv
+
+all_movies = []
+
+with open('final.csv') as f:
+    reader = csv.reader(f)
+    data = list(reader)
+    all_movies = data[1:]
+
+liked_movies = []
+not_liked_movies = []
+did_not_watch = []
+def get_recommendations(title):
+    idx = indices[title]
+    sim_scores = list(enumerate(cosine_sim[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:11]
+    movie_indices = [i[0] for i in sim_scores]
+    return df[['title', 'poster_link', 'release_date', 'runtime', 'vote_average', 'overview']].iloc[movie_indices].values.tolist()
+    from flask import Flask, jsonify, request
+
+from storage import all_movies, liked_movies, not_liked_movies, did_not_watch
+from demographic_filtering import output
+from content_filtering import get_recommendations
+
+app = Flask(__name__)
+
+@app.route("/get-movie")
